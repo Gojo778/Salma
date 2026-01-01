@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For SALMA</title>
+  <style>
+    :root{
+      --bg:#ffd7e5;
+      --bg2:#ffe9f1;
+      --card:#ffffffcc;
+      --ink:#3b1b2b;
+      --muted:#6a3a52;
+      --accent:#c84b78;
+      --shadow: 0 18px 45px rgba(0,0,0,.15);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 700px at 15% 25%, #ff6fa340, transparent 55%),
+        radial-gradient(700px 600px at 85% 30%, #ffb6cf55, transparent 60%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
+      display:grid;
+      place-items:center;
+      padding:18px;
+      overflow-x:hidden;
+    }
+    .app{ width:min(860px, 100%); display:grid; gap:14px; }
+    .card{
+      background: var(--card);
+      border: 1px solid #ffffff;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hidden{display:none !important;}
+    .paper{
+      background:
+        radial-gradient(1px 1px at 20% 25%, #00000010 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 65%, #00000010 50%, transparent 51%),
+        radial-gradient(1px 1px at 40% 80%, #00000010 50%, transparent 51%),
+        linear-gradient(180deg, #ffffffd8, #ffffffc8);
+    }
+
+    /* Floating hearts + cats layer (intro) */
+    .floatLayer{
+      position:absolute;
+      inset:-20px;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+      opacity:.95;
+    }
+    .floatLayer span{
+      position:absolute;
+      font-size: clamp(16px, 3.4vw, 30px);
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.14));
+      animation: floaty linear infinite;
+      opacity:.0;
+    }
+    @keyframes floaty{
+      0%{ transform:translateY(40px) rotate(-8deg) scale(.95); opacity:0; }
+      12%{ opacity:1; }
+      80%{ opacity:1; }
+      100%{ transform:translateY(-520px) rotate(10deg) scale(1.06); opacity:0; }
+    }
+
+    /* Intro */
+    .opening{
+      position:relative;
+      z-index:1;
+      display:grid;
+      gap:12px;
+      justify-items:center;
+      text-align:center;
+      padding:22px 16px;
+    }
+    .kitty{ width:170px;height:170px; position:relative; filter: drop-shadow(0 18px 22px rgba(0,0,0,.12)); }
+    .kitty .head{ position:absolute; inset:30px 22px 18px 22px; background:#fff; border-radius:40px; border:3px solid #2a1a22; }
+    .kitty .ear{ position:absolute; top:20px; width:52px;height:52px; background:#fff; border:3px solid #2a1a22; border-bottom:none; border-radius:16px 16px 0 0; }
+    .kitty .ear.left{left:26px; transform: rotate(-14deg);}
+    .kitty .ear.right{right:26px; transform: rotate(10deg);}
+    .kitty .eye{ position:absolute; top:92px; width:18px;height:18px; border-radius:50%; background:#2a1a22; }
+    .kitty .eye.left{left:62px} .kitty .eye.right{right:62px}
+    .kitty .mouth{ position:absolute; top:112px; left:50%; width:28px;height:18px; transform:translateX(-50%); border-bottom:3px solid #2a1a22; border-radius:0 0 18px 18px;}
+    .kitty .blush{ position:absolute; top:112px; width:34px;height:18px; background:#ff8fb3; opacity:.55; border-radius:999px;}
+    .kitty .blush.left{left:38px} .kitty .blush.right{right:38px}
+    .kitty .hearts{ position:absolute; inset:0; display:grid; place-items:center; font-size:22px; opacity:.9; }
+
+    .bigTitle{
+      margin:0;
+      font-weight:1000;
+      letter-spacing:.02em;
+      color:var(--accent);
+      font-size: clamp(26px, 5vw, 50px);
+      text-transform: uppercase;
+    }
+    .smallText{
+      margin:0;
+      color:var(--muted);
+      font-weight:900;
+      font-size:13px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+    }
+
+    /* Passcode UI */
+    .passWrap{
+      width:min(420px, 100%);
+      display:grid;
+      gap:10px;
+      margin-top:6px;
+    }
+    .passRow{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .passInput{
+      width: 100%;
+      padding:14px 14px;
+      border-radius:16px;
+      border:2px solid #ffffff;
+      background:#ffffffda;
+      font-weight:1000;
+      letter-spacing:.08em;
+      text-align:center;
+      font-size:16px;
+      color:#3b1b2b;
+      outline:none;
+      box-shadow: 0 12px 24px rgba(0,0,0,.08);
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:14px;
+      border:0;
+      cursor:pointer;
+      font-weight:1000;
+      background: linear-gradient(135deg, #ff6fa3, #ffb6cf);
+      color:#3b1124;
+      box-shadow: 0 14px 26px rgba(255,111,163,.25);
+      user-select:none;
+    }
+    .btn.secondary{
+      background:#ffffffcc;
+      border:1px solid #ffffff;
+      box-shadow:none;
+      color:#2f1530;
+    }
+    .hint{margin-top:4px; font-size:13px; color:var(--muted); font-weight:900; min-height:18px;}
+
+    /* UI */
+    .topbar{
+      display:flex; flex-wrap:wrap;
+      align-items:center; justify-content:space-between;
+      gap:10px; margin-bottom:10px;
+    }
+    .tag{
+      font-size:13px;
+      color:var(--muted);
+      background:#ffffffb8;
+      border:1px solid #ffffff;
+      padding:8px 10px;
+      border-radius:999px;
+      text-align:center;
+      font-weight:1000;
+    }
+
+    canvas{
+      width:100%;
+      max-width:520px;
+      border-radius:18px;
+      border: 2px solid #ffffff;
+      background: #ffffff;
+      display:block;
+      margin: 0 auto;
+      box-shadow: var(--shadow);
+      touch-action: none;
+    }
+    .ctrlRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:10px;
+    }
+
+    /* Modal + letter + typing */
+    .modal{
+      position:fixed; inset:0;
+      display:none; place-items:center;
+      padding:18px;
+      background: rgba(0,0,0,.35);
+      z-index:9999;
+    }
+    .modal.show{display:grid}
+    .modalCard{
+      width:min(860px, 100%);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #fff, #fff7fb);
+      border: 1px solid #ffffff;
+      box-shadow: 0 22px 60px rgba(0,0,0,.18);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .modalHeader{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; margin-bottom:10px;
+    }
+    .modalHeader .close{
+      border:1px solid #ffffff;
+      background:#ffffff;
+      border-radius:14px;
+      padding:10px 12px;
+      font-weight:1000;
+      cursor:pointer;
+      color:#2f1530;
+    }
+    .msg{
+      margin:0;
+      font-size: clamp(18px, 2.3vw, 24px);
+      line-height:1.55;
+      color:var(--ink);
+      font-weight:1000;
+    }
+    .msg2{
+      margin:10px 0 0;
+      font-size:15.5px;
+      line-height:1.7;
+      color:var(--muted);
+      font-weight:900;
+      white-space:pre-wrap;
+    }
+    .letter{
+      margin-top:12px;
+      padding:16px 16px 18px;
+      border-radius:18px;
+      border:2px solid #ffe2ed;
+      background:
+        radial-gradient(10px 10px at 12% 22%, #ffb6cf35 35%, transparent 36%),
+        radial-gradient(10px 10px at 78% 28%, #ffb6cf2e 35%, transparent 36%),
+        radial-gradient(10px 10px at 34% 78%, #ffb6cf2e 35%, transparent 36%),
+        linear-gradient(180deg, #ffffff, #fff7fb);
+      box-shadow: 0 10px 22px rgba(0,0,0,.08);
+      white-space:pre-wrap;
+      line-height:1.75;
+      color:#5a2d43;
+      font-weight:900;
+      position:relative;
+      overflow:hidden;
+      min-height: 190px;
+      transform-origin: center;
+      animation: letterPop .35s ease-out;
+    }
+    @keyframes letterPop{ from{transform:scale(.985);opacity:.6} to{transform:scale(1);opacity:1} }
+    .letter::before{
+      content:"🐱  🌸  💌  🐾  💗";
+      position:absolute;
+      top:10px; right:14px;
+      font-size:14px; opacity:.95;
+      animation: floatBadge 1.8s ease-in-out infinite;
+    }
+    @keyframes floatBadge{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+    .typingHint{
+      margin-top:10px;
+      display:none;
+      color: var(--muted);
+      font-weight:1000;
+      font-size:13px;
+    }
+    .typingHint.show{display:block;}
+    .modalActions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px; justify-content:flex-end;
+    }
+
+    /* Celebration */
+    .celebrate{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:10000;
+      overflow:hidden;
+    }
+    .celebrate span{
+      position:absolute;
+      font-size: clamp(18px, 3.8vw, 34px);
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.18));
+      opacity:0;
+      animation: floatUp 1.8s ease-in forwards;
+    }
+    @keyframes floatUp{
+      0%{transform:translateY(30px) scale(.9); opacity:0}
+      12%{opacity:1}
+      70%{opacity:1}
+      100%{transform:translateY(-220px) scale(1.06); opacity:0}
+    }
+
+    /* FINAL PAGE (bear) */
+    .finalWrap{
+      display:grid;
+      gap:14px;
+      justify-items:center;
+      text-align:center;
+      padding:18px 10px;
+    }
+    .finalTitle{
+      margin:0;
+      font-weight:1000;
+      color:var(--accent);
+      font-size: clamp(22px, 3.8vw, 34px);
+      letter-spacing:.02em;
+    }
+    .finalSub{
+      margin:0;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.6;
+    }
+
+    /* Cute bear drawing */
+    .bearStage{
+      width:min(440px, 100%);
+      height: 330px;
+      border-radius:22px;
+      border:1px solid #ffffff;
+      background: linear-gradient(180deg, #ffffff, #fff4f9);
+      box-shadow: 0 16px 40px rgba(0,0,0,.10);
+      position:relative;
+      overflow:hidden;
+    }
+    .bearStage::before{
+      content:"💗  🐾  🌸  💗  🐾  🌸";
+      position:absolute;
+      top:14px; left:50%;
+      transform:translateX(-50%);
+      font-size:14px;
+      opacity:.9;
+      animation: floatBadge 2.2s ease-in-out infinite;
+    }
+
+    .bear{
+      position:absolute;
+      left:50%;
+      top:55%;
+      transform:translate(-50%,-50%);
+      width: 180px;
+      height: 180px;
+      filter: drop-shadow(0 18px 22px rgba(0,0,0,.12));
+    }
+    .bear .head{
+      position:absolute;
+      inset: 26px 20px 12px 20px;
+      background:#f7d7b6;
+      border:3px solid #3a1f2b;
+      border-radius: 46px;
+    }
+    .bear .ear{
+      position:absolute;
+      width:54px;height:54px;
+      background:#f7d7b6;
+      border:3px solid #3a1f2b;
+      border-radius: 18px;
+      top:14px;
+    }
+    .bear .ear.left{ left:22px; transform:rotate(-12deg); }
+    .bear .ear.right{ right:22px; transform:rotate(12deg); }
+    .bear .ear::after{
+      content:"";
+      position:absolute;
+      inset: 12px;
+      background:#f2b9c8;
+      border-radius: 14px;
+      opacity:.85;
+    }
+    .bear .eye{
+      position:absolute;
+      width:16px;height:16px;
+      background:#3a1f2b;
+      border-radius:999px;
+      top:90px;
+    }
+    .bear .eye.left{ left:66px; }
+    .bear .eye.right{ right:66px; }
+    .bear .snout{
+      position:absolute;
+      width:54px;height:40px;
+      background:#f3caa6;
+      border:3px solid #3a1f2b;
+      border-radius: 18px;
+      left:50%;
+      top:102px;
+      transform:translateX(-50%);
+    }
+    .bear .nose{
+      position:absolute;
+      width:18px;height:14px;
+      background:#3a1f2b;
+      border-radius: 8px;
+      left:50%;
+      top:112px;
+      transform:translateX(-50%);
+    }
+    .bear .mouth{
+      position:absolute;
+      width:28px;height:14px;
+      left:50%;
+      top:128px;
+      transform:translateX(-50%);
+      border-bottom:3px solid #3a1f2b;
+      border-radius: 0 0 14px 14px;
+    }
+
+    /* Heart with SALMA */
+    .heartName{
+      position:absolute;
+      left:50%;
+      top:64px;
+      transform:translateX(-50%);
+      width: 200px;
+      height: 160px;
+      display:grid;
+      place-items:center;
+      filter: drop-shadow(0 14px 18px rgba(0,0,0,.12));
+      animation: heartPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes heartPulse{ 0%,100%{transform:translateX(-50%) scale(1)} 50%{transform:translateX(-50%) scale(1.04)} }
+    .heartName::before, .heartName::after{
+      content:"";
+      position:absolute;
+      width:92px;height:92px;
+      background:#ff6fa3;
+      border:3px solid #3a1f2b;
+      border-radius: 999px;
+      top:18px;
+    }
+    .heartName::before{ left:44px; }
+    .heartName::after{ right:44px; }
+    .heartName .bottom{
+      position:absolute;
+      width: 120px;
+      height: 120px;
+      background:#ff6fa3;
+      border:3px solid #3a1f2b;
+      left:50%;
+      top:52px;
+      transform:translateX(-50%) rotate(45deg);
+      border-radius: 18px;
+    }
+    .heartName .txt{
+      position:relative;
+      z-index:2;
+      font-weight:1000;
+      letter-spacing:.08em;
+      color:#2b1220;
+      font-size:18px;
+      text-transform:uppercase;
+      text-shadow: 0 2px 0 rgba(255,255,255,.6);
+    }
+
+    .bearPaw{
+      position:absolute;
+      width:56px;height:56px;
+      background:#f7d7b6;
+      border:3px solid #3a1f2b;
+      border-radius: 18px;
+      top:190px;
+    }
+    .bearPaw.left{ left:82px; transform:rotate(-10deg); }
+    .bearPaw.right{ right:82px; transform:rotate(10deg); }
+    .bearPaw::after{
+      content:"🐾";
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      opacity:.9;
+    }
+
+    .sparkles{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    .sparkles span{
+      position:absolute;
+      font-size:22px;
+      opacity:0;
+      animation: sparkle 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.12));
+    }
+    @keyframes sparkle{
+      0%{transform:translateY(8px) scale(.95); opacity:0}
+      20%{opacity:1}
+      55%{opacity:1}
+      100%{transform:translateY(-12px) scale(1.05); opacity:0}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- INTRO (PASSCODE) -->
+    <section class="card paper" id="screenIntro">
+      <div class="floatLayer" aria-hidden="true" id="floatLayer"></div>
+
+      <div class="opening">
+        <div class="kitty" aria-hidden="true">
+          <div class="hearts">💗 &nbsp; 🐱 &nbsp; 💗</div>
+          <div class="ear left"></div>
+          <div class="ear right"></div>
+          <div class="head"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="blush left"></div>
+          <div class="blush right"></div>
+          <div class="mouth"></div>
+        </div>
+
+        <h1 class="bigTitle">FOR SALMA 💗</h1>
+        <p class="smallText">Enter the passcode to open</p>
+
+        <div class="passWrap">
+          <input class="passInput" id="passcode" inputmode="numeric" placeholder="DD/MM" maxlength="5" />
+          <div class="passRow">
+            <button class="btn" id="btnUnlock" type="button">Unlock 🔓</button>
+            <button class="btn secondary" id="btnClear" type="button">Clear</button>
+          </div>
+          <div class="hint" id="passHint"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME 1: MAZE -->
+    <section class="card hidden" id="screenMaze">
+      <div class="topbar">
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+          <div class="tag">Game 1/3: Maze</div>
+          <div class="tag">Find the flowers 🌸</div>
+        </div>
+        <div class="ctrlRow" style="margin-top:0;">
+          <button class="btn secondary" id="btnHomeFromMaze">Home</button>
+          <button class="btn secondary" id="btnMazeRestart">Restart</button>
+          <button class="btn" id="btnNextFromMaze">Next game ➜</button>
+        </div>
+      </div>
+
+      <canvas id="mazeCanvas" width="520" height="520"></canvas>
+
+      <div class="ctrlRow"><button class="btn" id="mazeUp" type="button">⬆</button></div>
+      <div class="ctrlRow">
+        <button class="btn" id="mazeLeft" type="button">⬅</button>
+        <button class="btn" id="mazeDown" type="button">⬇</button>
+        <button class="btn" id="mazeRight" type="button">➡</button>
+      </div>
+
+      <div class="tag" style="margin-top:10px;">You can also use arrow keys.</div>
+    </section>
+
+    <!-- GAME 2: MISSION -->
+    <section class="card hidden" id="screenMission">
+      <div class="topbar">
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+          <div class="tag">Game 2/3: Mission</div>
+          <div class="tag">🌸 <span id="mFlowers">0</span>/3</div>
+          <div class="tag">🔑 <span id="mKey">no</span></div>
+          <div class="tag">Avoid 😾</div>
+        </div>
+        <div class="ctrlRow" style="margin-top:0;">
+          <button class="btn secondary" id="btnHomeFromMission">Home</button>
+          <button class="btn secondary" id="btnMissionRestart">Restart</button>
+          <button class="btn" id="btnNextFromMission">Next game ➜</button>
+        </div>
+      </div>
+
+      <canvas id="missionCanvas" width="520" height="520"></canvas>
+
+      <div class="ctrlRow"><button class="btn" id="misUp" type="button">⬆</button></div>
+      <div class="ctrlRow">
+        <button class="btn" id="misLeft" type="button">⬅</button>
+        <button class="btn" id="misDown" type="button">⬇</button>
+        <button class="btn" id="misRight" type="button">➡</button>
+      </div>
+
+      <div class="tag" style="margin-top:10px;">Collect 🌸🌸🌸 + 🔑, avoid 😾, then reach 🐱</div>
+    </section>
+
+    <!-- GAME 3: JUMPY -->
+    <section class="card hidden" id="screenJumpy">
+      <div class="topbar">
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+          <div class="tag">Game 3/3: Jumpy</div>
+          <div class="tag">Score: <span id="jScore">0</span></div>
+          <div class="tag">Don’t fall 😼</div>
+        </div>
+        <div class="ctrlRow" style="margin-top:0;">
+          <button class="btn secondary" id="btnHomeFromJumpy">Home</button>
+          <button class="btn secondary" id="btnJumpyRestart">Restart</button>
+          <button class="btn" id="btnNextFromJumpy">Next game ➜</button>
+        </div>
+      </div>
+
+      <canvas id="jumpyCanvas" width="520" height="520"></canvas>
+
+      <div class="ctrlRow">
+        <button class="btn" id="jumpLeft" type="button">⬅</button>
+        <button class="btn" id="jumpRight" type="button">➡</button>
+      </div>
+
+      <div class="tag" style="margin-top:10px;">Use ⬅ ➡ (keyboard or buttons). Jump is automatic.</div>
+    </section>
+
+    <!-- FINAL PAGE -->
+    <section class="card hidden" id="screenFinal">
+      <div class="finalWrap">
+        <h2 class="finalTitle">For SALMA 💗</h2>
+        <p class="finalSub">A cute bear drawing a heart with your name.</p>
+
+        <div class="bearStage">
+          <div class="sparkles" aria-hidden="true">
+            <span style="left:18%; top:32%; animation-delay:.1s">✨</span>
+            <span style="left:78%; top:30%; animation-delay:.3s">🌸</span>
+            <span style="left:24%; top:72%; animation-delay:.2s">💗</span>
+            <span style="left:72%; top:74%; animation-delay:.45s">✨</span>
+            <span style="left:50%; top:18%; animation-delay:.25s">🐾</span>
+          </div>
+
+          <div class="heartName" aria-hidden="true">
+            <div class="bottom"></div>
+            <div class="txt">SALMA</div>
+          </div>
+
+          <div class="bear" aria-hidden="true">
+            <div class="ear left"></div>
+            <div class="ear right"></div>
+            <div class="head"></div>
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <div class="snout"></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+          </div>
+
+          <div class="bearPaw left" aria-hidden="true"></div>
+          <div class="bearPaw right" aria-hidden="true"></div>
+        </div>
+
+        <div class="ctrlRow" style="margin-top:2px;">
+          <button class="btn secondary" id="btnFinalHome">Home</button>
+          <button class="btn" id="btnFinalReplay">Play again</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modalCard">
+      <div class="modalHeader">
+        <div class="tag" id="modalTitle">Message</div>
+        <button class="close" id="modalClose">Close</button>
+      </div>
+
+      <p class="msg" id="modalMsg1"></p>
+      <p class="msg2" id="modalMsg2"></p>
+
+      <div class="letter" id="letterBox" style="display:none;"></div>
+      <div class="typingHint" id="typingHint">Typing… (tap Next to skip)</div>
+
+      <div class="modalActions">
+        <button class="btn secondary" id="modalHome">Home</button>
+        <button class="btn" id="modalNext">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // CONFIG
+    // =========================
+    const HER_NAME = "SALMA";
+    const PASSCODE_OK = "31/08";
+
+    // =========================
+    // FLOATING HEARTS + CATS (INTRO)
+    // =========================
+    const floatLayer = document.getElementById("floatLayer");
+    const floatItems = ["💗","💖","🐱","🐾","💞","😺","🌸"];
+    (function buildFloaties(){
+      // deterministic-ish layout
+      for(let i=0;i<18;i++){
+        const s = document.createElement("span");
+        s.textContent = floatItems[i % floatItems.length];
+        s.style.left = Math.random()*100 + "%";
+        s.style.top  = (65 + Math.random()*45) + "%";
+        s.style.animationDuration = (3.4 + Math.random()*3.2) + "s";
+        s.style.animationDelay = (Math.random()*1.4) + "s";
+        s.style.opacity = "0";
+        floatLayer.appendChild(s);
+      }
+    })();
+
+    // =========================
+    // NAV
+    // =========================
+    const screens = {
+      intro: document.getElementById("screenIntro"),
+      maze: document.getElementById("screenMaze"),
+      mission: document.getElementById("screenMission"),
+      jumpy: document.getElementById("screenJumpy"),
+      final: document.getElementById("screenFinal"),
+    };
+
+    const gameOrder = ["maze","mission","jumpy"];
+    let currentGame = "maze";
+
+    function show(name){
+      stopMissionLoop();
+      stopJumpyLoop();
+
+      Object.values(screens).forEach(s => s.classList.add("hidden"));
+      screens[name].classList.remove("hidden");
+      currentGame = name;
+
+      if(name === "maze") mazeInit();
+      if(name === "mission") missionInit();
+      if(name === "jumpy") jumpyInit();
+    }
+
+    function goNextGame(){
+      const idx = gameOrder.indexOf(currentGame);
+      const next = gameOrder[(idx + 1) % gameOrder.length];
+      show(next);
+    }
+
+    // Passcode logic
+    const passInput = document.getElementById("passcode");
+    const passHint = document.getElementById("passHint");
+    document.getElementById("btnUnlock").addEventListener("click", () => {
+      const v = (passInput.value || "").trim();
+      if(v === PASSCODE_OK){
+        passHint.textContent = "";
+        show("maze");
+      } else {
+        passHint.textContent = "Wrong passcode 😼 try again.";
+      }
+    });
+    document.getElementById("btnClear").addEventListener("click", () => {
+      passInput.value = "";
+      passHint.textContent = "";
+      passInput.focus();
+    });
+
+    // Auto-format DD/MM while typing
+    passInput.addEventListener("input", () => {
+      let v = passInput.value.replace(/[^\d]/g, "").slice(0,4);
+      if(v.length >= 3) v = v.slice(0,2) + "/" + v.slice(2);
+      passInput.value = v;
+      passHint.textContent = "";
+    });
+
+    // Next buttons
+    document.getElementById("btnNextFromMaze").addEventListener("click", goNextGame);
+    document.getElementById("btnNextFromMission").addEventListener("click", goNextGame);
+    document.getElementById("btnNextFromJumpy").addEventListener("click", goNextGame);
+
+    // Home buttons
+    document.getElementById("btnHomeFromMaze").addEventListener("click", () => show("intro"));
+    document.getElementById("btnHomeFromMission").addEventListener("click", () => show("intro"));
+    document.getElementById("btnHomeFromJumpy").addEventListener("click", () => show("intro"));
+    document.getElementById("btnFinalHome").addEventListener("click", () => show("intro"));
+    document.getElementById("btnFinalReplay").addEventListener("click", () => show("maze"));
+
+    // =========================
+    // MODAL + TYPING
+    // =========================
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalMsg1 = document.getElementById("modalMsg1");
+    const modalMsg2 = document.getElementById("modalMsg2");
+    const modalClose = document.getElementById("modalClose");
+    const modalHome = document.getElementById("modalHome");
+    const modalNext = document.getElementById("modalNext");
+    const letterBox = document.getElementById("letterBox");
+    const typingHint = document.getElementById("typingHint");
+
+    let modalNextAction = null;
+
+    let typingTimer = null;
+    let typingDone = true;
+    let typingFullText = "";
+
+    function stopTyping(){
+      if(typingTimer) clearInterval(typingTimer);
+      typingTimer = null;
+      typingDone = true;
+      typingHint.classList.remove("show");
+    }
+
+    function typeInto(el, text, speed=14){
+      stopTyping();
+      typingDone = false;
+      typingFullText = text;
+      el.textContent = "";
+      typingHint.classList.add("show");
+
+      let i = 0;
+      typingTimer = setInterval(() => {
+        i++;
+        el.textContent = text.slice(0, i);
+        if(i >= text.length){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          typingDone = true;
+          typingHint.classList.remove("show");
+        }
+      }, speed);
+    }
+
+    function openModal(title, m1, m2, nextLabel="Next", nextAction=null, letterText=null){
+      stopTyping();
+      modalTitle.textContent = title;
+      modalMsg1.textContent = m1;
+      modalMsg2.textContent = m2;
+
+      if(letterText){
+        letterBox.style.display = "block";
+        typeInto(letterBox, letterText, 14);
+      } else {
+        letterBox.style.display = "none";
+        letterBox.textContent = "";
+        typingHint.classList.remove("show");
+      }
+
+      modalNext.textContent = nextLabel;
+      modalNextAction = nextAction;
+      modal.classList.add("show");
+    }
+
+    function closeModal(){
+      stopTyping();
+      modal.classList.remove("show");
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modalHome.addEventListener("click", () => {
+      closeModal();
+      show("intro");
+    });
+    modal.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
+
+    modalNext.addEventListener("click", () => {
+      if(letterBox.style.display === "block" && !typingDone){
+        stopTyping();
+        letterBox.textContent = typingFullText;
+        return;
+      }
+      closeModal();
+      if(typeof modalNextAction === "function") modalNextAction();
+    });
+
+    function celebrate(){
+      const wrap = document.createElement("div");
+      wrap.className = "celebrate";
+      const items = ["🐱","🌸","🐾","💗","💌","😺","💞"];
+      for(let i=0;i<26;i++){
+        const s = document.createElement("span");
+        s.textContent = items[Math.floor(Math.random()*items.length)];
+        s.style.left = Math.random()*100 + "%";
+        s.style.top = (70 + Math.random()*25) + "%";
+        s.style.animationDelay = (Math.random()*0.35) + "s";
+        s.style.animationDuration = (1.4 + Math.random()*0.9) + "s";
+        wrap.appendChild(s);
+      }
+      document.body.appendChild(wrap);
+      setTimeout(()=> wrap.remove(), 2400);
+    }
+
+    const apologyLetter =
+`(=^･ω･^=) ♡
+
+🌸 Salma 🌸
+
+I’m sorry for everything.
+I know I messed up in ways that hurt you, and I hate that I made you feel anything less than loved and safe.
+
+All I need is my baby to come back.
+Please stop acting cold with me.
+
+I love you so much, Salma,
+and I want you with me.
+
+💗`;
+
+    function winSequence(backToGame){
+      celebrate();
+      openModal(
+        "Yaaay 💗",
+        `I love youuu ${HER_NAME}!! Good job, my pretty girl 🌸`,
+        "Come read something I wrote just for you 💌",
+        "Read my letter",
+        () => {
+          openModal(
+            "From me to you 💌",
+            `Please read this, ${HER_NAME}.`,
+            "Tap Next if you want it faster.",
+            "Final surprise ➜",
+            () => show("final"),
+            apologyLetter
+          );
+        }
+      );
+    }
+
+    // =========================
+    // GAME 1: MAZE
+    // =========================
+    const mazeCanvas = document.getElementById("mazeCanvas");
+    const mctx = mazeCanvas.getContext("2d");
+
+    const MAZE = [
+      "1111111111111",
+      "1000001000001",
+      "1011101011101",
+      "1010000010001",
+      "1010111110101",
+      "1000100010101",
+      "1110101010101",
+      "1000101010001",
+      "1011101011111",
+      "1010000000001",
+      "1010111111101",
+      "1000000000001",
+      "1111111111111",
+    ];
+    const MROWS = MAZE.length, MCOLS = MAZE[0].length;
+    const MTILE = Math.floor(mazeCanvas.width / MCOLS);
+    const MOFFY = Math.floor((mazeCanvas.height - (MROWS * MTILE)) / 2);
+
+    let mazePlayer = { x: 1, y: 1 };
+    const mazeGoal = { x: 11, y: 11 };
+    let mazeWon = false;
+
+    function drawMaze(){
+      mctx.clearRect(0,0,mazeCanvas.width,mazeCanvas.height);
+      mctx.fillStyle = "#ffffff";
+      mctx.fillRect(0,0,mazeCanvas.width,mazeCanvas.height);
+
+      for(let y=0;y<MROWS;y++){
+        for(let x=0;x<MCOLS;x++){
+          const isWall = (MAZE[y][x] === "1");
+          mctx.fillStyle = isWall ? "#7cc9e8" : "#fff";
+          mctx.fillRect(x*MTILE, MOFFY + y*MTILE, MTILE, MTILE);
+        }
+      }
+
+      mctx.font = `${Math.floor(MTILE*0.75)}px system-ui, Apple Color Emoji`;
+      mctx.textAlign="center";
+      mctx.textBaseline="middle";
+      mctx.fillText("🌸", mazeGoal.x*MTILE + MTILE/2, MOFFY + mazeGoal.y*MTILE + MTILE/2);
+
+      mctx.font = `${Math.floor(MTILE*0.72)}px system-ui, Apple Color Emoji`;
+      mctx.fillText("👧", mazePlayer.x*MTILE + MTILE/2, MOFFY + mazePlayer.y*MTILE + MTILE/2);
+
+      mctx.strokeStyle="rgba(0,0,0,.08)";
+      mctx.lineWidth=2;
+      mctx.strokeRect(1,1,mazeCanvas.width-2,mazeCanvas.height-2);
+    }
+
+    function mazeCanMove(x,y){
+      if(x<0 || y<0 || x>=MCOLS || y>=MROWS) return false;
+      return MAZE[y][x] === "0";
+    }
+
+    function mazeMove(dx,dy){
+      if(mazeWon) return;
+      const nx = mazePlayer.x + dx;
+      const ny = mazePlayer.y + dy;
+      if(mazeCanMove(nx,ny)){
+        mazePlayer.x = nx; mazePlayer.y = ny;
+        drawMaze();
+        if(mazePlayer.x === mazeGoal.x && mazePlayer.y === mazeGoal.y){
+          mazeWon = true;
+          winSequence("maze");
+        }
+      }
+    }
+
+    function mazeInit(){
+      mazeWon = false;
+      mazePlayer = {x:1,y:1};
+      drawMaze();
+    }
+
+    document.getElementById("btnMazeRestart").addEventListener("click", mazeInit);
+    document.getElementById("mazeUp").addEventListener("click", () => mazeMove(0,-1));
+    document.getElementById("mazeDown").addEventListener("click", () => mazeMove(0,1));
+    document.getElementById("mazeLeft").addEventListener("click", () => mazeMove(-1,0));
+    document.getElementById("mazeRight").addEventListener("click", () => mazeMove(1,0));
+
+    // =========================
+    // GAME 2: MISSION (collect + avoid)
+    // =========================
+    const missionCanvas = document.getElementById("missionCanvas");
+    const qctx = missionCanvas.getContext("2d");
+    const flowersEl = document.getElementById("mFlowers");
+    const keyEl = document.getElementById("mKey");
+
+    const QSIZE = 13;
+    const QTILE = Math.floor(missionCanvas.width / QSIZE);
+
+    const QUEST = [
+      "1111111111111",
+      "1000000000001",
+      "1011110111111",
+      "1000010000001",
+      "1111011111101",
+      "1000000000101",
+      "1011111110101",
+      "1010000010001",
+      "1010111011111",
+      "1000100000001",
+      "1110111111101",
+      "1000000000001",
+      "1111111111111",
+    ];
+
+    let qPlayer = {x:1,y:11};
+    let qGoal   = {x:11,y:1};
+    let qDoor   = {x:11,y:2};
+    let qFlowers = [];
+    let qKey = {x:2,y:2, taken:false};
+    let qCount = 0;
+    let hasKey = false;
+    let qWon = false;
+
+    let enemies = [];
+    let enemyTimer = null;
+
+    function qIsWall(x,y){
+      if(x<0||y<0||x>=QSIZE||y>=QSIZE) return true;
+      return QUEST[y][x] === "1";
+    }
+    function qIsBlockedByDoor(x,y){
+      if(x === qDoor.x && y === qDoor.y && !hasKey) return true;
+      return false;
+    }
+
+    function qPlaceItems(){
+      qFlowers = [
+        {x:3,y:9, taken:false},
+        {x:9,y:5, taken:false},
+        {x:10,y:10, taken:false},
+        {x:6,y:1, taken:false},
+        {x:1,y:6, taken:false},
+      ];
+      qKey = {x:2,y:2, taken:false};
+      qCount = 0;
+      hasKey = false;
+      flowersEl.textContent = qCount;
+      keyEl.textContent = "no";
+    }
+
+    function qPlaceEnemies(){
+      enemies = [
+        {x:5,y:11, dx:1, dy:0},
+        {x:9,y:7,  dx:0, dy:1},
+        {x:3,y:4,  dx:1, dy:0},
+      ];
+    }
+
+    function drawMission(){
+      qctx.clearRect(0,0,missionCanvas.width, missionCanvas.height);
+
+      qctx.fillStyle = "#7a76b8";
+      qctx.fillRect(0,0,missionCanvas.width, missionCanvas.height);
+
+      qctx.fillStyle = "rgba(255,255,255,.85)";
+      for(let i=0;i<70;i++){
+        const x = (i*37)%missionCanvas.width;
+        const y = (i*71)%missionCanvas.height;
+        qctx.fillRect(x, y, 2, 2);
+      }
+
+      for(let y=0;y<QSIZE;y++){
+        for(let x=0;x<QSIZE;x++){
+          if(qIsWall(x,y)){
+            qctx.fillStyle = "rgba(255,255,255,.18)";
+            qctx.fillRect(x*QTILE, y*QTILE, QTILE, QTILE);
+          } else {
+            qctx.fillStyle = "rgba(0,0,0,.06)";
+            qctx.fillRect(x*QTILE, y*QTILE, QTILE, QTILE);
+          }
+        }
+      }
+
+      qctx.font = `${Math.floor(QTILE*0.75)}px system-ui, Apple Color Emoji`;
+      qctx.textAlign="center";
+      qctx.textBaseline="middle";
+
+      qctx.fillText(hasKey ? "🚪" : "🔒", qDoor.x*QTILE+QTILE/2, qDoor.y*QTILE+QTILE/2);
+
+      if(!qKey.taken) qctx.fillText("🔑", qKey.x*QTILE+QTILE/2, qKey.y*QTILE+QTILE/2);
+
+      qFlowers.forEach(f => { if(!f.taken) qctx.fillText("🌸", f.x*QTILE+QTILE/2, f.y*QTILE+QTILE/2); });
+
+      qctx.font = `${Math.floor(QTILE*0.78)}px system-ui, Apple Color Emoji`;
+      qctx.fillText("🐱", qGoal.x*QTILE+QTILE/2, qGoal.y*QTILE+QTILE/2);
+      if(!(qCount>=3 && hasKey)){
+        qctx.font = `${Math.floor(QTILE*0.6)}px system-ui, Apple Color Emoji`;
+        qctx.fillText("🔒", qGoal.x*QTILE+QTILE/2, qGoal.y*QTILE+QTILE/2 + QTILE*0.62);
+      }
+
+      qctx.font = `${Math.floor(QTILE*0.75)}px system-ui, Apple Color Emoji`;
+      enemies.forEach(en => qctx.fillText("😾", en.x*QTILE+QTILE/2, en.y*QTILE+QTILE/2));
+
+      qctx.font = `${Math.floor(QTILE*0.78)}px system-ui, Apple Color Emoji`;
+      qctx.fillText("👧", qPlayer.x*QTILE+QTILE/2, qPlayer.y*QTILE+QTILE/2);
+
+      qctx.strokeStyle="rgba(255,255,255,.25)";
+      qctx.lineWidth=3;
+      qctx.strokeRect(2,2,missionCanvas.width-4, missionCanvas.height-4);
+    }
+
+    function qCheckCollision(){
+      const hit = enemies.some(en => en.x===qPlayer.x && en.y===qPlayer.y);
+      if(hit){
+        qGameOver();
+        return true;
+      }
+      return false;
+    }
+
+    function qTryCollect(){
+      qFlowers.forEach(f=>{
+        if(!f.taken && f.x===qPlayer.x && f.y===qPlayer.y){
+          f.taken = true;
+          qCount++;
+          flowersEl.textContent = qCount;
+        }
+      });
+      if(!qKey.taken && qKey.x===qPlayer.x && qKey.y===qPlayer.y){
+        qKey.taken = true;
+        hasKey = true;
+        keyEl.textContent = "yes";
+      }
+    }
+
+    function missionMove(dx,dy){
+      if(qWon) return;
+      const nx = qPlayer.x + dx;
+      const ny = qPlayer.y + dy;
+
+      if(!qIsWall(nx,ny) && !qIsBlockedByDoor(nx,ny)){
+        qPlayer.x = nx; qPlayer.y = ny;
+        qTryCollect();
+        drawMission();
+        if(qCheckCollision()) return;
+
+        if(qCount >= 3 && hasKey && qPlayer.x===qGoal.x && qPlayer.y===qGoal.y){
+          qWon = true;
+          stopMissionLoop();
+          winSequence("mission");
+        }
+      }
+    }
+
+    function enemyStep(){
+      if(qWon) return;
+
+      enemies.forEach(en=>{
+        const nx = en.x + en.dx;
+        const ny = en.y + en.dy;
+
+        if(qIsWall(nx,ny) || qIsBlockedByDoor(nx,ny)){
+          en.dx = -en.dx;
+          en.dy = -en.dy;
+          return;
+        }
+        en.x = nx; en.y = ny;
+      });
+
+      drawMission();
+      qCheckCollision();
+    }
+
+    function startMissionLoop(){
+      stopMissionLoop();
+      enemyTimer = setInterval(enemyStep, 260);
+    }
+
+    function stopMissionLoop(){
+      if(enemyTimer){
+        clearInterval(enemyTimer);
+        enemyTimer = null;
+      }
+    }
+
+    function qGameOver(){
+      stopMissionLoop();
+      openModal(
+        "Oops 😿",
+        "The enemy caught you!",
+        "Try again baby — you got this 💗",
+        "Restart",
+        () => show("mission")
+      );
+    }
+
+    function missionInit(){
+      qWon = false;
+      qPlayer = {x:1,y:11};
+      qGoal   = {x:11,y:1};
+      qDoor   = {x:11,y:2};
+      qPlaceItems();
+      qPlaceEnemies();
+      drawMission();
+      startMissionLoop();
+    }
+
+    document.getElementById("btnMissionRestart").addEventListener("click", () => show("mission"));
+    document.getElementById("misUp").addEventListener("click", () => missionMove(0,-1));
+    document.getElementById("misDown").addEventListener("click", () => missionMove(0,1));
+    document.getElementById("misLeft").addEventListener("click", () => missionMove(-1,0));
+    document.getElementById("misRight").addEventListener("click", () => missionMove(1,0));
+
+    // =========================
+    // GAME 3: JUMPY
+    // =========================
+    const jumpyCanvas = document.getElementById("jumpyCanvas");
+    const jctx = jumpyCanvas.getContext("2d");
+    const jScoreEl = document.getElementById("jScore");
+
+    const JW = jumpyCanvas.width, JH = jumpyCanvas.height;
+
+    let jPlayer = { x: JW/2, y: JH*0.65, w: 24, h: 28, vx: 0, vy: -9 };
+    let jPlatforms = [];
+    let jScore = 0;
+    let jWon = false;
+    let jTimer = null;
+    let jLeftHeld = false;
+    let jRightHeld = false;
+
+    const GRAV = 0.42;
+    const MOVE = 0.75;
+    const JUMP = -10.5;
+
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    function jumpyReset(){
+      jWon = false;
+      jScore = 0;
+      jScoreEl.textContent = "0";
+      jPlayer = { x: JW/2, y: JH*0.65, w: 24, h: 28, vx: 0, vy: -9 };
+
+      jPlatforms = [];
+      jPlatforms.push({ x: JW/2 - 60, y: JH - 40, w: 120, h: 12 });
+      let y = JH - 90;
+      while(y > -200){
+        jPlatforms.push({ x: rand(20, JW-120), y, w: rand(70, 120), h: 12 });
+        y -= rand(60, 95);
+      }
+    }
+
+    function drawJumpy(){
+      jctx.fillStyle = "#6f6ab5";
+      jctx.fillRect(0,0,JW,JH);
+
+      jctx.fillStyle = "rgba(255,255,255,.85)";
+      for(let i=0;i<85;i++){
+        const x = (i*41)%JW;
+        const y = (i*79)%JH;
+        jctx.fillRect(x, y, 2, 2);
+      }
+
+      jctx.fillStyle = "rgba(255,255,255,.12)";
+      jctx.beginPath();
+      jctx.ellipse(130, 140, 90, 40, 0, 0, Math.PI*2);
+      jctx.ellipse(190, 150, 70, 32, 0, 0, Math.PI*2);
+      jctx.ellipse(90, 155, 70, 32, 0, 0, Math.PI*2);
+      jctx.fill();
+
+      jctx.beginPath();
+      jctx.ellipse(380, 380, 95, 42, 0, 0, Math.PI*2);
+      jctx.ellipse(450, 392, 70, 34, 0, 0, Math.PI*2);
+      jctx.ellipse(330, 395, 70, 34, 0, 0, Math.PI*2);
+      jctx.fill();
+
+      jPlatforms.forEach(p=>{
+        jctx.fillStyle = "rgba(70,45,35,.55)";
+        jctx.fillRect(p.x, p.y, p.w, p.h);
+        jctx.fillStyle = "rgba(255,255,255,.18)";
+        jctx.fillRect(p.x, p.y, p.w, 3);
+      });
+
+      jctx.font = "28px system-ui, Apple Color Emoji";
+      jctx.textAlign = "center";
+      jctx.textBaseline = "middle";
+      jctx.fillText("👧", jPlayer.x, jPlayer.y);
+
+      jctx.font = "16px system-ui";
+      jctx.textAlign = "left";
+      jctx.fillStyle = "rgba(255,255,255,.92)";
+      jctx.fillText("SCORE: " + Math.floor(jScore), 12, 22);
+
+      jctx.strokeStyle="rgba(255,255,255,.18)";
+      jctx.lineWidth=3;
+      jctx.strokeRect(2,2,JW-4,JH-4);
+    }
+
+    function jumpyGameOver(){
+      stopJumpyLoop();
+      openModal(
+        "Aww 😿",
+        "You fell down!",
+        "Restart and jump higher, baby 💗",
+        "Restart",
+        () => show("jumpy")
+      );
+    }
+
+    function jumpyWin(){
+      if(jWon) return;
+      jWon = true;
+      stopJumpyLoop();
+      winSequence("jumpy");
+    }
+
+    function stepJumpy(){
+      if(jWon) return;
+
+      if(jLeftHeld) jPlayer.vx -= MOVE;
+      if(jRightHeld) jPlayer.vx += MOVE;
+      jPlayer.vx *= 0.85;
+
+      jPlayer.vy += GRAV;
+      jPlayer.x += jPlayer.vx;
+      jPlayer.y += jPlayer.vy;
+
+      if(jPlayer.x < -10) jPlayer.x = JW + 10;
+      if(jPlayer.x > JW + 10) jPlayer.x = -10;
+
+      if(jPlayer.vy > 0){
+        for(const p of jPlatforms){
+          const withinX = (jPlayer.x > p.x - 10) && (jPlayer.x < p.x + p.w + 10);
+          const hitY = (jPlayer.y + 14 >= p.y) && (jPlayer.y + 14 <= p.y + p.h + 6);
+          if(withinX && hitY){
+            jPlayer.vy = JUMP;
+            break;
+          }
+        }
+      }
+
+      const scrollLine = JH * 0.40;
+      if(jPlayer.y < scrollLine){
+        const dy = (scrollLine - jPlayer.y);
+        jPlayer.y = scrollLine;
+
+        jPlatforms.forEach(p => p.y += dy);
+
+        jScore += dy;
+        jScoreEl.textContent = Math.floor(jScore);
+
+        jPlatforms = jPlatforms.filter(p => p.y < JH + 50);
+        while(jPlatforms.length < 10){
+          const topY = Math.min(...jPlatforms.map(p=>p.y));
+          jPlatforms.push({ x: rand(20, JW-120), y: topY - rand(65, 95), w: rand(70, 120), h: 12 });
+        }
+      }
+
+      if(jScore >= 1300) jumpyWin();
+
+      if(jPlayer.y > JH + 40){
+        jumpyGameOver();
+        return;
+      }
+
+      drawJumpy();
+    }
+
+    function startJumpyLoop(){
+      stopJumpyLoop();
+      jTimer = setInterval(stepJumpy, 16);
+    }
+
+    function stopJumpyLoop(){
+      if(jTimer){
+        clearInterval(jTimer);
+        jTimer = null;
+      }
+      jLeftHeld = false;
+      jRightHeld = false;
+    }
+
+    function jumpyInit(){
+      jumpyReset();
+      drawJumpy();
+      startJumpyLoop();
+    }
+
+    document.getElementById("btnJumpyRestart").addEventListener("click", () => show("jumpy"));
+    document.getElementById("jumpLeft").addEventListener("pointerdown", () => jLeftHeld = true);
+    document.getElementById("jumpLeft").addEventListener("pointerup", () => jLeftHeld = false);
+    document.getElementById("jumpLeft").addEventListener("pointerleave", () => jLeftHeld = false);
+    document.getElementById("jumpRight").addEventListener("pointerdown", () => jRightHeld = true);
+    document.getElementById("jumpRight").addEventListener("pointerup", () => jRightHeld = false);
+    document.getElementById("jumpRight").addEventListener("pointerleave", () => jRightHeld = false);
+
+    // =========================
+    // KEYBOARD (context-aware)
+    // =========================
+    window.addEventListener("keydown",(e)=>{
+      if(e.key === "Enter" && !screens.intro.classList.contains("hidden")){
+        document.getElementById("btnUnlock").click();
+      }
+
+      if(e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "ArrowLeft" || e.key === "ArrowRight"){
+        if(!screens.maze.classList.contains("hidden")){
+          if(e.key==="ArrowUp") mazeMove(0,-1);
+          if(e.key==="ArrowDown") mazeMove(0,1);
+          if(e.key==="ArrowLeft") mazeMove(-1,0);
+          if(e.key==="ArrowRight") mazeMove(1,0);
+        } else if(!screens.mission.classList.contains("hidden")){
+          if(e.key==="ArrowUp") missionMove(0,-1);
+          if(e.key==="ArrowDown") missionMove(0,1);
+          if(e.key==="ArrowLeft") missionMove(-1,0);
+          if(e.key==="ArrowRight") missionMove(1,0);
+        } else if(!screens.jumpy.classList.contains("hidden")){
+          if(e.key==="ArrowLeft") jLeftHeld = true;
+          if(e.key==="ArrowRight") jRightHeld = true;
+        }
+      }
+    });
+
+    window.addEventListener("keyup",(e)=>{
+      if(!screens.jumpy.classList.contains("hidden")){
+        if(e.key==="ArrowLeft") jLeftHeld = false;
+        if(e.key==="ArrowRight") jRightHeld = false;
+      }
+    });
+
+    // Restart buttons that route through show() to re-init cleanly
+    document.getElementById("btnMissionRestart").addEventListener("click", () => show("mission"));
+    document.getElementById("btnMazeRestart").addEventListener("click", mazeInit);
+
+    // Next buttons already wired
+    document.getElementById("btnNextFromMaze").addEventListener("click", goNextGame);
+    document.getElementById("btnNextFromMission").addEventListener("click", goNextGame);
+    document.getElementById("btnNextFromJumpy").addEventListener("click", goNextGame);
+
+    // Start on intro
+    show("intro");
+    passInput.focus();
+  </script>
+</body>
+</html>
